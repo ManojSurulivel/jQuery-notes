@@ -1,1 +1,3 @@
 # jQuery-notes
+
+## jQuery Projects
