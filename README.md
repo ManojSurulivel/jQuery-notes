@@ -1,3 +1,4 @@
 # jQuery-notes
 
-## jQuery Projects
+## jQuery 6 Projects
+## jQuery All Concepts Notes
