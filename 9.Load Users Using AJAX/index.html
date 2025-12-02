@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery AJAX - Load Users</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    #app {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      background: #2980b9;
+    }
+
+    #status {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #3498db;
+      color: #fff;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+  <h2>👥 AJAX - Load Users using jQuery </h2>
+
+  <div id="app">
+    <button id="loadBtn">Load Users</button>
+    <span id="status"></span>
+    <p id="error"></p>
+
+    <table id="userTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>City</th>
+        </tr>
+      </thead>
+      <tbody id="userBody">
+        <!-- Data will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+
+      $("#loadBtn").click(function(){
+        $("#error").text("");
+        $("#status").text("Loading users... Please wait.");
+        $("#userTable").hide(); // hide old data until new loads
+        $("#userBody").empty();
+
+        $.ajax({
+          url: "https://jsonplaceholder.typicode.com/users",
+          method: "GET",
+          dataType: "json",
+
+          beforeSend: function(){
+            console.log("Sending request...");
+            $("#loadBtn").prop("disabled", true);
+          },
+
+          success: function(data){
+            console.log("SUCCESS:", data);
+
+            if (!Array.isArray(data) || data.length === 0) {
+              $("#status").text("No users found.");
+              return;
+            }
+
+     data.forEach(function(user){ 
+  // Change single quotes to backticks for the template literal
+  const row = `
+    <tr> 
+      <td>${user.name}</td> 
+      <td>${user.username}</td> 
+      <td>${user.email}</td> 
+      <td>${user.address?.city || ""}</td> 
+    </tr>
+  `; 
+  $("#userBody").append(row); 
+});
+
+
+            $("#userTable").fadeIn(300);
+            $("#status").text("✅ Users loaded successfully.");
+          },
+
+          error: function(xhr, status, error){
+            console.log("ERROR:", xhr, status, error);
+            $("#error").text("❌ Failed to load users: " + status + " - " + error);
+            $("#status").text("");
+          },
+
+          complete: function(){
+            console.log("Request completed.");
+            $("#loadBtn").prop("disabled", false);
+          }
+        });
+
+      });
+
+    });
+  </script>
+
+</body>
+</html>

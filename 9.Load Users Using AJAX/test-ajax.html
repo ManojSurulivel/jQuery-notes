@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AJAX Test</title>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <button id="testBtn">Test AJAX</button>
+  <pre id="output"></pre>
+
+  <script>
+    $(document).ready(function () {
+
+      $("#testBtn").click(function () {
+        $("#output").text("Loading...");
+
+        $.ajax({
+          url: "https://jsonplaceholder.typicode.com/users",
+          method: "GET",
+          dataType: "json",
+          success: function (data) {
+            // Show first user name to confirm
+            $("#output").text("First user: " + data[0].name);
+            console.log("SUCCESS:", data);
+          },
+          error: function (xhr, status, error) {
+            $("#output").text("Error: " + status + " - " + error);
+            console.log("ERROR:", xhr, status, error);
+          }
+        });
+      });
+
+    });
+  </script>
+</body>
+</html>

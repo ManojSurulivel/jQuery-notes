@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery To-Do List</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background: #f4f4f4;
+    }
+
+    #todo-container {
+      width: 350px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 70%;
+      padding: 8px;
+    }
+
+    button {
+      padding: 9px 12px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: #f0f0f0;
+      padding: 10px;
+      margin: 6px 0;
+      cursor: pointer;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      background: #c8f7c5;
+    }
+
+    .delete {
+      float: right;
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+  <h2>✔ Simple jQuery To-Do List</h2>
+
+  <div id="todo-container">
+    <input id="taskInput" type="text" placeholder="Enter your task..." />
+    <button id="addBtn">Add Task</button>
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+
+      // Add Task on Button Click
+      $("#addBtn").click(function () {
+        const task = $("#taskInput").val().trim();
+
+        if (task !== "") {
+          // create new li
+          const newItem = $("<li>" + task + "<span class='delete'>❌</span></li>");
+
+          // append to list
+          $("#taskList").append(newItem);
+
+          // animate only the new item
+          newItem.hide().fadeIn(300);
+
+          // clear input
+          $("#taskInput").val("");
+        }
+      });
+
+      // Also add task on Enter key
+      $("#taskInput").keyup(function (e) {
+        if (e.key === "Enter") {
+          $("#addBtn").click();
+        }
+      });
+
+      // Mark Task Completed (event delegation)
+      $(document).on("click", "#taskList li", function () {
+        $(this).toggleClass("completed");
+      });
+
+      // Delete Task (event delegation)
+      $(document).on("click", ".delete", function (e) {
+        e.stopPropagation(); // don't trigger li click
+        $(this).parent().fadeOut(300, function () {
+          $(this).remove();
+        });
+      });
+
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>jQuery Form Validation</title>
+
+<style>
+  * {
+    font-family: Arial;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    background: #f4f4f4;
+  }
+
+  form {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    width: 350px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  #success {
+    color: green;
+    font-weight: bold;
+    display: none;
+  }
+
+  button {
+    padding: 10px;
+    width: 100%;
+    background: #3498db;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  button:hover {
+    background: #2980b9;
+  }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+<form id="myForm">
+  <h2>Signup Form</h2>
+
+  <label>Name:</label>
+  <input type="text" id="name">
+  <span id="nameError" class="error"></span>
+
+  <label>Email:</label>
+  <input type="text" id="email">
+  <span id="emailError" class="error"></span>
+
+  <label>Password:</label>
+  <input type="password" id="password">
+  <span id="passError" class="error"></span>
+
+  <button type="submit">Submit</button>
+  <p id="success">Form submitted successfully! 🎉</p>
+</form>
+
+<script>
+$(document).ready(function(){
+
+  $("#myForm").submit(function(e){
+    e.preventDefault();  // Prevent page refresh
+
+    let valid = true;
+    const name = $("#name").val().trim();
+    const email = $("#email").val().trim();
+    const password = $("#password").val().trim();
+
+    // Reset all errors
+    $(".error").text("");
+
+    // Name Validation
+    if(name.length < 3){
+      $("#nameError").text("Name must be at least 3 characters");
+      valid = false;
+    }
+
+    // Email Validation
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if(!emailPattern.test(email)){
+      $("#emailError").text("Enter a valid email address");
+      valid = false;
+    }
+
+    // Password Validation
+    if(password.length < 6){
+      $("#passError").text("Password must be min 6 characters");
+      valid = false;
+    }
+
+    // If All Valid
+    if(valid){
+      $("#success").fadeIn().delay(2000).fadeOut();
+      $("#myForm")[0].reset();
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>
